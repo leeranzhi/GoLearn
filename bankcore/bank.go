@@ -17,6 +17,10 @@ type Account struct {
 	Balance float64
 }
 
+type Bank interface {
+	Statement() string
+}
+
 func (a *Account) Deposit(amount float64) error {
 	if amount <= 0 {
 		return errors.New("the amount to deposit should be greater than zero")
@@ -38,4 +42,21 @@ func (a *Account) Withdraw(amount float64) error {
 
 func (a *Account) Statement() string {
 	return fmt.Sprintf("%v - %v - %v", a.Number, a.Name, a.Balance)
+}
+
+func Statement(b Bank) string {
+	return b.Statement()
+}
+
+func (a *Account) Transfer(amount float64, dest *Account) error {
+	if amount <= 0 {
+		return errors.New("the amount to transfer be greater than zero")
+	}
+
+	if a.Balance < amount {
+		return errors.New("the amount to transfer should be greater than dest's balance")
+	}
+	dest.Deposit(amount)
+	a.Withdraw(amount)
+	return nil
 }

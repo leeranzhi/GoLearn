@@ -84,3 +84,30 @@ func TestStatement(t *testing.T) {
 		t.Error("statement doesn't have the proper format")
 	}
 }
+
+func TestTransfer(t *testing.T) {
+	account1 := Account{
+		Customer: Customer{
+			Name:    "John",
+			Address: "Los Angeles, California",
+			Phone:   "086 5550166",
+		},
+		Number:  1001,
+		Balance: 0,
+	}
+	account2 := Account{
+		Customer: Customer{
+			Name:    "Lee",
+			Address: "Los Angeles, California",
+			Phone:   "086 5550199",
+		},
+		Number:  1002,
+		Balance: 0,
+	}
+	account1.Deposit(100)
+	err := account1.Transfer(50, &account2)
+	if account2.Balance != 50 && account1.Balance != 50 {
+		t.Error("balance is not being updated after transfer", err)
+	}
+
+}
